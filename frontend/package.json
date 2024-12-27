@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
       "@react-keycloak/web": "^3.4.0",
+      "react-oauth2-code-pkce": "1.22.2",
       "@types/node": "^16.18.0",
       "@types/react": "^18.0.0",
       "@types/react-dom": "^18.0.0",

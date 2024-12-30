@@ -1,23 +1,22 @@
 import React from 'react';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak, { KeycloakConfig } from 'keycloak-js';
+import { AuthProvider, TAuthConfig } from "react-oauth2-code-pkce"
 import ReportPage from './components/ReportPage';
 
-const keycloakConfig: KeycloakConfig = {
-  url: process.env.REACT_APP_KEYCLOAK_URL,
-  realm: process.env.REACT_APP_KEYCLOAK_REALM||"",
-  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID||""
+const authConfig: TAuthConfig = {
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID||"",
+  authorizationEndpoint: `${process.env.REACT_APP_KEYCLOAK_URL}/realms/${process.env.REACT_APP_KEYCLOAK_REALM}/protocol/openid-connect/auth`,
+  tokenEndpoint: `${process.env.REACT_APP_KEYCLOAK_URL}/realms/${process.env.REACT_APP_KEYCLOAK_REALM}/protocol/openid-connect/token`,
+  redirectUri: 'http://localhost:3000/',
+  scope: 'openid'
 };
-
-const keycloak = new Keycloak(keycloakConfig);
 
 const App: React.FC = () => {
   return (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <AuthProvider authConfig={authConfig}>
       <div className="App">
         <ReportPage />
       </div>
-    </ReactKeycloakProvider>
+    </AuthProvider>
   );
 };
 

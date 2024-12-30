@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: report-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
+  main:
+    banner-mode: off
+
+server:
+  port: 8000

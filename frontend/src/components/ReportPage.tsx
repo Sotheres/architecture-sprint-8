@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useKeycloak } from '@react-keycloak/web';
+import React, { useState, useContext } from 'react';
+import { AuthContext, IAuthContext } from 'react-oauth2-code-pkce'
 
 const ReportPage: React.FC = () => {
-  const { keycloak, initialized } = useKeycloak();
+  const { token, logIn, loginInProgress }: IAuthContext = useContext(AuthContext)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const downloadReport = async () => {
-    if (!keycloak?.token) {
+    if (!token) {
       setError('Not authenticated');
       return;
     }
@@ -18,10 +18,9 @@ const ReportPage: React.FC = () => {
 
       const response = await fetch(`${process.env.REACT_APP_API_URL}/reports`, {
         headers: {
-          'Authorization': `Bearer ${keycloak.token}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -30,15 +29,15 @@ const ReportPage: React.FC = () => {
     }
   };
 
-  if (!initialized) {
+  if (loginInProgress) {
     return <div>Loading...</div>;
   }
 
-  if (!keycloak.authenticated) {
+  if (!token) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <button
-          onClick={() => keycloak.login()}
+          onClick={() => logIn()}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
           Login
